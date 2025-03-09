@@ -46,25 +46,20 @@ class RoleSeeder extends Seeder
 
         // Create permissions
         foreach ($permissions as $permission) {
-            Permission::firstOrCreate([
-                'name' => $permission,
-                'guard_name' => 'web',
-            ]);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Create roles
-
+        // Create roles (super_admin, teacher, student)
+        $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
         $teacher = Role::firstOrCreate(['name' => 'teacher', 'guard_name' => 'web']);
         $student = Role::firstOrCreate(['name' => 'student', 'guard_name' => 'web']);
-        $superAdmin = Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
 
-        // Assign permissions
-
-
+        // Assign all permissions to super_admin
         if (!$superAdmin->permissions()->exists()) {
             $superAdmin->givePermissionTo(Permission::all());
         }
 
+        // Assign specific permissions to teacher
         $teacherPermissions = [
             'grade.view_any',
             'grade.view',
@@ -78,9 +73,16 @@ class RoleSeeder extends Seeder
             $teacher->givePermissionTo($teacherPermissions);
         }
 
+        // Assign specific permissions to student
         $studentPermissions = ['grade.view_any', 'grade.view'];
         if (!$student->permissions()->whereIn('name', $studentPermissions)->exists()) {
             $student->givePermissionTo($studentPermissions);
         }
+
+        // Remove admin role if it exists
+        // $admin = Role::where('name', 'admin')->first();
+        // if ($admin) {
+        //     $admin->delete();
+        // }
     }
 }

@@ -20,7 +20,9 @@ class GradeResource extends Resource
 {
     protected static ?string $model = Grade::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-academic-cap';
+    protected static ?string $navigationGroup = 'Academic Management';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -39,7 +41,7 @@ class GradeResource extends Resource
                 Select::make('teacher_id')
                     ->relationship('teacher', 'name')
                     ->preload()
-                    ->searchable()  
+                    ->searchable()
                     ->required(),
                 TextInput::make('mark')
                     ->numeric()
