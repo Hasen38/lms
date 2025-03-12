@@ -1,13 +1,24 @@
-# fly.toml app configuration file generated for lms-aged-fog-3730 on 2025-03-12T17:31:16+03:00
+# fly.toml app configuration file generated for lms-dark-wave-7313 on 2025-03-12T19:01:57+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'lms-aged-fog-3730'
+app = 'lms-dark-wave-7313'
 primary_region = 'fra'
+console_command = 'php /var/www/html/artisan tinker'
 
 [build]
-  image = 'mysql:8'
+  [build.args]
+    NODE_VERSION = '18'
+    PHP_VERSION = '8.2'
+
+[env]
+  APP_ENV = 'production'
+  LOG_CHANNEL = 'stderr'
+  LOG_LEVEL = 'info'
+  LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
+  SESSION_DRIVER = 'cookie'
+  SESSION_SECURE_COOKIE = 'true'
 
 [http_service]
   internal_port = 8080
@@ -24,3 +35,4 @@ primary_region = 'fra'
 
 [deploy]
   release_command = "php artisan migrate --force"
+
